@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23031730333",
+    "project_id": "my-insta-tuto",
+    "storage_bucket": "my-insta-tuto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23031730333:android:6ca48f591c0155acb24474",
+        "android_client_info": {
+          "package_name": "imadbela.my_instax"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjtjuxxKbI5d9TYDy9KWhHxiX-UXfSbVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
