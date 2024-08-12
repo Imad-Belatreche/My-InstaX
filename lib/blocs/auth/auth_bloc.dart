@@ -12,6 +12,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository userRepository;
   late final StreamSubscription<User?> _userSubscription;
 
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    _userSubscription.cancel();
+    return super.close();
+  }
+
   AuthBloc({required UserRepository myUserRepository})
       : userRepository = myUserRepository,
         super(const AuthState.unknown()) {
