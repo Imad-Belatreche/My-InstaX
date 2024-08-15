@@ -10,7 +10,7 @@ class FirebaseUserRepository implements UserRepository {
   final FirebaseAuth _firebaseAuth;
   final userCollection = FirebaseFirestore.instance.collection('users');
 
-  FirebaseUserRepository({required FirebaseAuth? firebaseAuth})
+  FirebaseUserRepository({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   // Sign up
