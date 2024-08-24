@@ -12,7 +12,7 @@ dependencies:
 
   
   equatable: ^2.0.5
-  cupertino_icons: ^1.0.6
+
 
   # Firebase
   firebase_auth: ^5.1.4
