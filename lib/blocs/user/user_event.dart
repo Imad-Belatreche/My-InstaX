@@ -12,6 +12,5 @@ class GetMyUser extends UserEvent {
 
   const GetMyUser({required this.myUserId});
   @override
-  // TODO: implement props
   List<Object> get props => [myUserId];
 }

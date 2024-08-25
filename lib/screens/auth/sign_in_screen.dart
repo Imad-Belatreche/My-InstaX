@@ -23,7 +23,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -31,108 +30,124 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: MyFormTextField(
-              controller: emailController,
-              label: 'Email',
-              obscureText: false,
-              keyboardType: TextInputType.emailAddress,
-              prefixIcon: CupertinoIcons.mail_solid,
-              errorMsg: _errorMsg,
-              validator: (val) {
-                if (val!.isEmpty) {
-                  return 'Please fill in all fields';
-                } else if (!emailRegExp.hasMatch(val)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
+    return BlocListener<SignInBloc, SignInState>(
+      listener: (context, state) {
+        if (state is SignInSuccess) {
+          setState(() {
+            signInRequired = false;
+          });
+        } else if (state is SignInProccess) {
+          signInRequired = true;
+        } else if (state is SignInFailure) {
+          setState(() {
+            signInRequired = false;
+            _errorMsg = 'Invalid email or password';
+          });
+        }
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: MyFormTextField(
-              controller: passwordController,
-              label: 'Password',
-              obscureText: obscurePassword,
-              keyboardType: TextInputType.visiblePassword,
-              prefixIcon: CupertinoIcons.lock_fill,
-              errorMsg: _errorMsg,
-              sufixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    obscurePassword = !obscurePassword;
-                    if (obscurePassword) {
-                      iconPassword = CupertinoIcons.eye_fill;
-                    } else {
-                      iconPassword = CupertinoIcons.eye_slash_fill;
-                    }
-                  });
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: MyFormTextField(
+                controller: emailController,
+                label: 'Email',
+                obscureText: false,
+                keyboardType: TextInputType.emailAddress,
+                prefixIcon: CupertinoIcons.mail_solid,
+                errorMsg: _errorMsg,
+                validator: (val) {
+                  if (val!.isEmpty) {
+                    return 'Please fill in all fields';
+                  } else if (!emailRegExp.hasMatch(val)) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
                 },
-                icon: Icon(iconPassword),
               ),
-              validator: (val) {
-                if (val!.isEmpty) {
-                  return 'Please fill in all fields';
-                } else if (!passwordRexExp.hasMatch(val)) {
-                  return 'Please enter valid input';
-                }
-                return null;
-              },
             ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          !signInRequired
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<SignInBloc>().add(
-                              SignInRequired(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                              ),
-                            );
+            const SizedBox(height: 10),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: MyFormTextField(
+                controller: passwordController,
+                label: 'Password',
+                obscureText: obscurePassword,
+                keyboardType: TextInputType.visiblePassword,
+                prefixIcon: CupertinoIcons.lock_fill,
+                errorMsg: _errorMsg,
+                sufixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                      if (obscurePassword) {
+                        iconPassword = CupertinoIcons.eye_fill;
+                      } else {
+                        iconPassword = CupertinoIcons.eye_slash_fill;
                       }
-                    },
-                    style: TextButton.styleFrom(
-                      elevation: 3,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(60),
+                    });
+                  },
+                  icon: Icon(iconPassword),
+                ),
+                validator: (val) {
+                  if (val!.isEmpty) {
+                    return 'Please fill in all fields';
+                  } else if (!passwordRexExp.hasMatch(val)) {
+                    return 'Please enter valid input';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            !signInRequired
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<SignInBloc>().add(
+                                SignInRequired(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                ),
+                              );
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        elevation: 3,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60),
+                        ),
                       ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        'Sign In',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 5,
+                        ),
+                        child: Text(
+                          'Sign In',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                )
-              : const CircularProgressIndicator()
-        ],
+                  )
+                : const CircularProgressIndicator()
+          ],
+        ),
       ),
     );
   }
