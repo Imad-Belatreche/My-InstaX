@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_instax/blocs/auth/auth_bloc.dart';
 import 'package:my_instax/blocs/sign_in/sign_in_bloc.dart';
+import 'package:my_instax/blocs/update_user_info/update_user_info_bloc.dart';
+import 'package:my_instax/blocs/user/user_bloc.dart';
 import 'package:my_instax/screens/home/home_screen.dart';
 import 'package:my_instax/screens/auth/welcome_screen.dart';
 
@@ -30,10 +32,27 @@ class MyAppView extends StatelessWidget {
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state.status == AuthStatus.authenticated) {
-            return BlocProvider(
-              create: (context) => SignInBloc(
-                context.read<AuthBloc>().userRepository,
-              ),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => SignInBloc(
+                    context.read<AuthBloc>().userRepository,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => UserBloc(
+                      userRepository: context.read<AuthBloc>().userRepository)
+                    ..add(
+                      GetMyUser(
+                          myUserId: context.read<AuthBloc>().state.user!.uid),
+                    ),
+                ),
+                BlocProvider(
+                  create: (context) => UpdateUserInfoBloc(
+                    userRepository: context.read<AuthBloc>().userRepository,
+                  ),
+                )
+              ],
               child: const HomeScreen(),
             );
           } else {

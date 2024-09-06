@@ -5,10 +5,10 @@ class MyUserModel extends Equatable {
   final String id;
   final String email;
   final String name;
-  final String? picture;
+  String? picture;
   final String? bio;
 
-  const MyUserModel({
+  MyUserModel({
     required this.id,
     required this.email,
     required this.name,
@@ -17,7 +17,7 @@ class MyUserModel extends Equatable {
   });
 
   // Empty user which represent unauthenticated user
-  static const empty = MyUserModel(
+  static final empty = MyUserModel(
     id: '',
     email: '',
     name: '',
@@ -35,7 +35,7 @@ class MyUserModel extends Equatable {
     return MyUserModel(
       id: id ?? this.id,
       email: email ?? this.email,
-      name: name ?? this.email,
+      name: name ?? this.name,
       picture: picture ?? this.picture,
       bio: bio ?? this.bio,
     );
