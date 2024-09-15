@@ -20,6 +20,8 @@ dependencies:
 
   user_repository:
     path: packages/user_repository
+  post_repository:
+    path: packages/post_repository
   image_picker: ^1.1.2
   image_cropper: ^8.0.2
 

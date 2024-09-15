@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_instax/blocs/sign_in/sign_in_bloc.dart';
 import 'package:my_instax/blocs/update_user_info/update_user_info_bloc.dart';
 import 'package:my_instax/blocs/user/user_bloc.dart';
+import 'package:my_instax/screens/home/post_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,9 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          shape: const CircleBorder(),
+        floatingActionButton: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            return FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostScreen(
+                      myUser: state.user!,
+                    ),
+                  ),
+                );
+              },
+              shape: const CircleBorder(),
+              foregroundColor: Theme.of(context).colorScheme.surface,
+              child: const Icon(CupertinoIcons.add),
+            );
+          },
         ),
         appBar: AppBar(
           elevation: 0,
@@ -48,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 maxWidth: 500,
                                 imageQuality: 40,
                               );
-                              //TODO: A problem is here when you select image the app exits
                               if (image != null) {
                                 CroppedFile? croppedFile =
                                     await ImageCropper().cropImage(
